@@ -1,11 +1,11 @@
+import { Stack } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
 
 const Layput = () => {
   return (
-    <View>
-      <Text>Layput</Text>
-    </View>
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 };
 

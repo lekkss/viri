@@ -6,6 +6,8 @@ const Layout = () => {
     <Stack>
       <Stack.Screen name="welcome" options={{ headerShown: false }} />
       <Stack.Screen name="email" options={{ headerShown: false }} />
+      <Stack.Screen name="confirm-email" options={{ headerShown: false }} />
+      <Stack.Screen name="name" options={{ headerShown: false }} />
     </Stack>
   );
 };

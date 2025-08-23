@@ -46,3 +46,17 @@ declare interface NavigationProps {
   navigation: any;
   route: any;
 }
+
+declare interface OtpInputFieldProps {
+  label?: string;
+  labelStyle?: string;
+  containerStyle?: string;
+  inputStyle?: string;
+  className?: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  onComplete?: (code: string) => void;
+  length?: number;
+  autoFocus?: boolean;
+  keyboardType?: "number-pad" | "numeric";
+}
