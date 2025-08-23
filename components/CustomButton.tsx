@@ -3,7 +3,13 @@ import { Text, TouchableOpacity } from "react-native";
 interface ButtonProps {
   onPress: () => void;
   title: string;
-  bgVariant?: "primary" | "secondary" | "danger" | "outline" | "success";
+  bgVariant?:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "outline"
+    | "success"
+    | "ghost";
   textVariant?: "primary" | "secondary" | "danger" | "success";
   IconLeft?: () => React.ReactNode;
   IconRight?: () => React.ReactNode;
@@ -23,8 +29,10 @@ const bgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
       return "bg-transparent";
     case "success":
       return "bg-green-500";
+    case "ghost":
+      return "bg-black/10";
     default:
-      return "bg-[#0286FF]";
+      return "bg-red-500";
   }
 };
 
@@ -58,7 +66,7 @@ const CustomButton = ({
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      className={`w-full p-4 rounded-full flex flex-row items-center justify-center ${
+      className={`w-full p-4 rounded-full flex flex-row items-center shadow-md shadow-black/20 justify-center ${
         disabled ? "opacity-50" : "active:opacity-80"
       } ${bgVariantStyle(bgVariant)} ${className}`}
       {...props}

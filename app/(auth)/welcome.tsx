@@ -1,6 +1,7 @@
 import BackgroundView from "@/components/BackgroundView";
 import { icons, images } from "@/constants";
-import CustomButton from "@/constants/CustomButton";
+import CustomButton from "@/components/CustomButton";
+import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -37,7 +38,9 @@ export default function Welcome() {
             className="mt-4"
             textVariant="secondary"
             bgVariant="outline"
-            onPress={() => {}}
+            onPress={() => {
+              router.replace("/(auth)/email");
+            }}
           />
           <Text className="font-inter-regular text-greyText text-sm text-center mt-2 max-w-[250px] mx-auto">
             By tapping continue, you agree to our{" "}
