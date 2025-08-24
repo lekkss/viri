@@ -10,7 +10,9 @@ const ChatCard = ({ chat }: ChatCardProps) => {
     <View
       className={` p-4 max-w-[80%] ${chat.isUser ? "self-end bg-white/20 rounded-2xl" : "self-start"}`}
     >
-      <Text className="text-white font-inter-regular">{chat.message}</Text>
+      <Text className="text-white font-inter-regular text-lg">
+        {chat.message}
+      </Text>
     </View>
   );
 };

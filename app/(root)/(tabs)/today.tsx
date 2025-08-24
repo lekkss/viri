@@ -1,5 +1,6 @@
 import AIInput from "@/components/AIInput";
 import ChatCard from "@/components/ChatCard";
+import ChatLoading from "@/components/ChatLoading";
 import EmptyChat from "@/components/EmptyChat";
 import Header from "@/components/Header";
 import ScreenContainer from "@/components/ScreenContainer";
@@ -8,6 +9,7 @@ import React from "react";
 import { FlatList, View } from "react-native";
 
 const Today = () => {
+  const isLoading = false;
   return (
     <ScreenContainer
       roundedBottom
@@ -29,11 +31,18 @@ const Today = () => {
             showsVerticalScrollIndicator={false}
             data={chat}
             renderItem={({ item }) => <ChatCard chat={item} />}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.createdAt.toString()}
             contentContainerStyle={{
               paddingTop: 20,
               gap: 10,
             }}
+            ListFooterComponent={() =>
+              isLoading && (
+                <View className="flex-1 flex justify-center items-start">
+                  <ChatLoading />
+                </View>
+              )
+            }
           />
         )}
 
