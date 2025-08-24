@@ -1,6 +1,12 @@
 import { images } from "@/constants";
 import React from "react";
-import { ImageBackground, View, ViewStyle } from "react-native";
+import {
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  ViewStyle,
+} from "react-native";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
@@ -42,12 +48,17 @@ const ScreenContainer = ({
         className="flex-1 w-full bg-black"
         resizeMode="cover"
       >
-        <View
-          className={`flex-1 ${safeArea ? "pt-12" : ""} ${className}`}
-          style={containerStyle}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
         >
-          {children}
-        </View>
+          <View
+            className={`flex-1 ${safeArea ? "pt-12" : ""} ${className}`}
+            style={containerStyle}
+          >
+            {children}
+          </View>
+        </KeyboardAvoidingView>
       </ImageBackground>
     );
   }

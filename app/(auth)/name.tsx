@@ -1,6 +1,6 @@
-import BackgroundView from "@/components/BackgroundView";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
+import ScreenContainer from "@/components/ScreenContainer";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
@@ -13,7 +13,7 @@ const Name = () => {
   const isNameValid = name.length > 2;
 
   return (
-    <BackgroundView>
+    <ScreenContainer useImage>
       <SafeAreaView className="flex h-full items-center">
         <View className="flex-1 mt-32 px-4 gap-3 w-full">
           <Text className="text-2xl font-inter-medium text-white text-center">
@@ -37,12 +37,12 @@ const Name = () => {
         <CustomButton
           title="Let's go"
           onPress={() => router.push("/(root)/(tabs)/today")}
-          className={`${!isInputFocused ? "mb-8" : "mb-[350px]"} w-11/12`}
+          className={`w-11/12 mb-8`}
           bgVariant={isNameValid ? "primary" : "ghost"}
           textVariant={isNameValid ? "primary" : "secondary"}
         />
       </SafeAreaView>
-    </BackgroundView>
+    </ScreenContainer>
   );
 };
 

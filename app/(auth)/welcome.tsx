@@ -1,13 +1,13 @@
-import BackgroundView from "@/components/BackgroundView";
-import { icons, images } from "@/constants";
 import CustomButton from "@/components/CustomButton";
+import ScreenContainer from "@/components/ScreenContainer";
+import { icons, images } from "@/constants";
 import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Welcome() {
   return (
-    <BackgroundView>
+    <ScreenContainer useImage>
       <SafeAreaView className="flex h-full px-4">
         <View className="flex-1 justify-center items-center">
           <Image
@@ -49,6 +49,6 @@ export default function Welcome() {
           </Text>
         </View>
       </SafeAreaView>
-    </BackgroundView>
+    </ScreenContainer>
   );
 }

@@ -1,6 +1,6 @@
-import BackgroundView from "@/components/BackgroundView";
 import CustomButton from "@/components/CustomButton";
 import OtpInputField from "@/components/OtpInputField";
+import ScreenContainer from "@/components/ScreenContainer";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
@@ -12,7 +12,7 @@ const ConfirmEmail = () => {
   const isOtpValid = otp.length === 6;
 
   return (
-    <BackgroundView>
+    <ScreenContainer useImage>
       <SafeAreaView className="flex h-full items-center">
         <View className="flex-1 mt-32 px-4 gap-3 w-full">
           <Text className="text-2xl font-inter-medium text-white text-center">
@@ -36,12 +36,12 @@ const ConfirmEmail = () => {
         <CustomButton
           title="Continue"
           onPress={() => router.push("/name")}
-          className={`${!isOtpValid ? "mb-[300px]" : "mb-[350px]"} w-11/12`}
+          className={`w-11/12 mb-8`}
           bgVariant={isOtpValid ? "primary" : "ghost"}
           textVariant={isOtpValid ? "primary" : "secondary"}
         />
       </SafeAreaView>
-    </BackgroundView>
+    </ScreenContainer>
   );
 };
 
