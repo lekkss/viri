@@ -60,3 +60,10 @@ declare interface OtpInputFieldProps {
   autoFocus?: boolean;
   keyboardType?: "number-pad" | "numeric";
 }
+
+declare interface Chat {
+  id: number;
+  isUser: boolean;
+  message: string;
+  createdAt: Date;
+}
