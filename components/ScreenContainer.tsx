@@ -51,6 +51,7 @@ const ScreenContainer = ({
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           className="flex-1"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 15 : 0}
         >
           <View
             className={`flex-1 ${safeArea ? "pt-12" : ""} ${className}`}

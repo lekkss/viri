@@ -37,7 +37,7 @@ const Name = () => {
         <CustomButton
           title="Let's go"
           onPress={() => router.push("/(root)/(tabs)/today")}
-          className={`w-11/12 mb-8`}
+          className={`w-11/12 `}
           bgVariant={isNameValid ? "primary" : "ghost"}
           textVariant={isNameValid ? "primary" : "secondary"}
         />

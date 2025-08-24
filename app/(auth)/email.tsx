@@ -35,7 +35,7 @@ const Email = () => {
         <CustomButton
           title="Continue"
           onPress={() => router.push("/confirm-email")}
-          className={`w-11/12 mb-8`}
+          className={`w-11/12 `}
           bgVariant={isEmailValid ? "primary" : "ghost"}
           textVariant={isEmailValid ? "primary" : "secondary"}
         />
