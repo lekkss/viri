@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 interface ButtonProps {
   onPress: () => void;
@@ -15,6 +15,7 @@ interface ButtonProps {
   IconRight?: () => React.ReactNode;
   className?: string;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 const bgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
@@ -59,6 +60,7 @@ const CustomButton = ({
   IconLeft,
   IconRight,
   className,
+  loading = false,
   disabled = false,
   ...props
 }: ButtonProps) => {
@@ -73,6 +75,7 @@ const CustomButton = ({
     >
       {/* Left Icon */}
       {IconLeft && <IconLeft />}
+      {loading && <ActivityIndicator size="small" color="white" />}
 
       {/* Text */}
       <Text

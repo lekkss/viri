@@ -1,15 +1,80 @@
+import { fetchAPI } from "@/assets/lib/fetch";
 import CustomButton from "@/components/CustomButton";
 import OtpInputField from "@/components/OtpInputField";
 import ScreenContainer from "@/components/ScreenContainer";
+import { useSignUpStore } from "@/store";
+import { useSignUp } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 
 const ConfirmEmail = () => {
+  const { signUp, setActive, isLoaded } = useSignUp();
   const [otp, setOtp] = useState("");
+  const {
+    verification,
+    setVerification,
+    setUser,
+    user,
+    setLoading,
+    isLoading,
+  } = useSignUpStore();
 
   // Check if email is valid (basic validation)
   const isOtpValid = otp.length === 6;
+
+  // Handle submission of verification form
+  const onVerifyPress = async () => {
+    if (!isLoaded) return;
+
+    setLoading(true);
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code: otp,
+      });
+
+      if (signUpAttempt.status === "complete") {
+        // Create user in database without name initially
+        await fetchAPI("/(api)/user", {
+          method: "POST",
+          body: JSON.stringify({
+            email: signUpAttempt.emailAddress,
+            clerkId: signUpAttempt.createdUserId,
+            name: signUpAttempt.emailAddress,
+          }),
+        });
+
+        // Store user data in store
+        setUser({
+          email: signUpAttempt.emailAddress || "",
+          clerkId: signUpAttempt.createdUserId || "",
+        });
+
+        await setActive({ session: signUpAttempt.createdSessionId });
+        setVerification({ ...verification, state: "success" });
+        router.push("/name");
+      } else {
+        setVerification({
+          ...verification,
+          state: "error",
+          error: signUpAttempt.status || "Verification failed",
+        });
+        Alert.alert("Error", "Verification failed. Please try again.");
+        console.error(JSON.stringify(signUpAttempt, null, 2));
+      }
+    } catch (err: any) {
+      setVerification({
+        ...verification,
+        state: "error",
+        error: err.errors[0].longMessage || "Verification failed",
+      });
+      Alert.alert("Error", err.errors[0].longMessage || "Verification failed");
+      console.error(JSON.stringify(err, null, 2));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScreenContainer useImage>
@@ -22,7 +87,7 @@ const ConfirmEmail = () => {
             Please enter the code we sent to
           </Text>
           <Text className="font-inter-medium text-white text-center max-w-[250px] mx-auto">
-            sam@gmail.com
+            {user.email}
           </Text>
           <OtpInputField
             containerStyle="mt-4"
@@ -34,11 +99,12 @@ const ConfirmEmail = () => {
           />
         </View>
         <CustomButton
-          title="Continue"
-          onPress={() => router.push("/name")}
-          className={`w-11/12 `}
-          bgVariant={isOtpValid ? "primary" : "ghost"}
-          textVariant={isOtpValid ? "primary" : "secondary"}
+          title={isLoading ? "Verifying..." : "Continue"}
+          onPress={onVerifyPress}
+          className={`w-[90%]`}
+          bgVariant={isOtpValid && !isLoading ? "primary" : "ghost"}
+          textVariant={isOtpValid && !isLoading ? "primary" : "secondary"}
+          disabled={isLoading}
         />
       </SafeAreaView>
     </ScreenContainer>

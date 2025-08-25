@@ -1,6 +1,7 @@
 import CustomButton from "@/components/CustomButton";
+import OAuth from "@/components/OAuth";
 import ScreenContainer from "@/components/ScreenContainer";
-import { icons, images } from "@/constants";
+import { images } from "@/constants";
 import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,15 +25,7 @@ export default function Welcome() {
         </View>
 
         <View className="w-full flex flex-col pb-6">
-          <CustomButton
-            title="Continue with Google"
-            className="mt-4"
-            IconLeft={() => (
-              <Image source={icons.google} className="w-6 h-6 mr-2" />
-            )}
-            textVariant="primary"
-            onPress={() => {}}
-          />
+          <OAuth />
           <CustomButton
             title="Continue with Email"
             className="mt-4"

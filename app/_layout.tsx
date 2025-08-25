@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { Inter_100Thin } from "@expo-google-fonts/inter/100Thin";
 import { Inter_100Thin_Italic } from "@expo-google-fonts/inter/100Thin_Italic";
 import { Inter_200ExtraLight } from "@expo-google-fonts/inter/200ExtraLight";
@@ -46,10 +48,12 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)" options={{ headerShown: false }} />
-    </Stack>
+    <ClerkProvider tokenCache={tokenCache}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(root)" options={{ headerShown: false }} />
+      </Stack>
+    </ClerkProvider>
   );
 }

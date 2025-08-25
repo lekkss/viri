@@ -1,16 +1,49 @@
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import ScreenContainer from "@/components/ScreenContainer";
+import { useSignUpStore } from "@/store";
+import { useSignUp } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 
 const Email = () => {
+  const { verification, setVerification, setUser, setLoading, isLoading } =
+    useSignUpStore();
   const [email, setEmail] = useState("");
+  const { signUp, isLoaded } = useSignUp();
 
   // Check if email is valid (basic validation)
   const isEmailValid =
     email.includes("@") && email.includes(".") && email.length > 5;
+
+  // Handle submission of sign-up form
+  const onSignUpPress = async () => {
+    if (!isLoaded) return;
+
+    setLoading(true);
+    try {
+      // Store email in store
+      setUser({ email });
+
+      // Start sign-up process using email and password provided
+      await signUp.create({
+        emailAddress: email,
+        password: "123lekaN@.",
+      });
+
+      // Send user an email with verification code
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+
+      setVerification({ ...verification, state: "pending" });
+      router.push("/confirm-email");
+    } catch (err: any) {
+      Alert.alert("Error", err.errors[0].longMessage || "Sign up failed");
+      console.error(JSON.stringify(err, null, 2));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScreenContainer useImage>
@@ -33,11 +66,12 @@ const Email = () => {
           />
         </View>
         <CustomButton
-          title="Continue"
-          onPress={() => router.push("/confirm-email")}
-          className={`w-11/12 `}
-          bgVariant={isEmailValid ? "primary" : "ghost"}
-          textVariant={isEmailValid ? "primary" : "secondary"}
+          title={isLoading ? "Loading..." : "Continue"}
+          onPress={onSignUpPress}
+          className={`w-11/12`}
+          bgVariant={isEmailValid && !isLoading ? "primary" : "ghost"}
+          textVariant={isEmailValid && !isLoading ? "primary" : "secondary"}
+          disabled={isLoading}
         />
       </SafeAreaView>
     </ScreenContainer>

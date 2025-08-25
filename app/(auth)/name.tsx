@@ -1,16 +1,44 @@
+import { fetchAPI } from "@/assets/lib/fetch";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import ScreenContainer from "@/components/ScreenContainer";
+import { useSignUpStore } from "@/store";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 
 const Name = () => {
   const [name, setName] = useState("");
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  const { user, setUser, setLoading, isLoading } = useSignUpStore();
 
-  // Check if email is valid (basic validation)
+  // Check if name is valid (basic validation)
   const isNameValid = name.length > 2;
+
+  const onNameChange = async (text: string) => {
+    if (!user.email) {
+      Alert.alert("Error", "Email not found. Please try again.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await fetchAPI("/(api)/user", {
+        method: "PATCH",
+        body: JSON.stringify({
+          email: user.email,
+          name: text,
+        }),
+      });
+
+      setUser({ name: text });
+      router.push("/(root)/(tabs)/today");
+    } catch (error) {
+      console.error("Error updating name:", error);
+      Alert.alert("Error", "Failed to update name. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScreenContainer useImage>
@@ -30,16 +58,15 @@ const Name = () => {
             keyboardType="default"
             value={name}
             onChangeText={setName}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
           />
         </View>
         <CustomButton
-          title="Let's go"
-          onPress={() => router.push("/(root)/(tabs)/today")}
-          className={`w-11/12 `}
-          bgVariant={isNameValid ? "primary" : "ghost"}
-          textVariant={isNameValid ? "primary" : "secondary"}
+          title={isLoading ? "Updating..." : "Let's go"}
+          onPress={() => onNameChange(name)}
+          className={`w-[90%]`}
+          bgVariant={isNameValid && !isLoading ? "primary" : "ghost"}
+          textVariant={isNameValid && !isLoading ? "primary" : "secondary"}
+          disabled={isLoading}
         />
       </SafeAreaView>
     </ScreenContainer>

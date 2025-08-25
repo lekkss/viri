@@ -1,6 +1,7 @@
 import account from "@/assets/icons/account.png";
 import attach from "@/assets/icons/attach.png";
 import audio from "@/assets/icons/audio.png";
+import chatPlus from "@/assets/icons/chat-plus.png";
 import check from "@/assets/icons/check.png";
 import explore from "@/assets/icons/explore.png";
 import google from "@/assets/icons/google.png";
@@ -35,4 +36,5 @@ export const icons = {
   audio,
   check,
   x,
+  chatPlus,
 };
