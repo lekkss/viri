@@ -45,10 +45,22 @@ const RecordingView = ({
   );
 };
 
-const AIInput = () => {
+const AIInput = ({
+  onSendMessage,
+}: {
+  onSendMessage: (message: string) => void;
+}) => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
+  const [message, setMessage] = useState("");
+
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      onSendMessage(message);
+      setMessage(""); // Clear the input after sending
+    }
+  };
 
   const stopRecording = useCallback(
     async (recording: Audio.Recording): Promise<string | null> => {
@@ -170,6 +182,8 @@ const AIInput = () => {
                   className="flex-1 text-base text-white"
                   placeholder="Tap to type or just talk"
                   placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                  value={message}
+                  onChangeText={setMessage}
                 />
                 <TouchableOpacity onPress={handleRecordButtonPress}>
                   <Image
@@ -180,7 +194,17 @@ const AIInput = () => {
                 </TouchableOpacity>
               </View>
               <View className="size-[50px] bg-white/20 rounded-full items-center justify-center">
-                <Image source={icons.attach} resizeMode="contain" />
+                {message.trim() ? (
+                  <TouchableOpacity onPress={handleSendMessage}>
+                    <Image
+                      source={icons.send}
+                      className=""
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <Image source={icons.share} resizeMode="contain" />
+                )}
               </View>
             </>
           )}

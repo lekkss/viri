@@ -62,8 +62,15 @@ declare interface OtpInputFieldProps {
 }
 
 declare interface Chat {
-  id: number;
+  id: string;
   isUser: boolean;
   message: string;
   createdAt: Date;
+}
+
+declare interface OpenAIResponse {
+  annotations: any[];
+  content: string;
+  refusal: any;
+  role: string;
 }

@@ -8,6 +8,7 @@ import google from "@/assets/icons/google.png";
 import today from "@/assets/icons/home.png";
 import library from "@/assets/icons/library.png";
 import mic from "@/assets/icons/mic.png";
+import send from "@/assets/icons/send.png";
 import share from "@/assets/icons/share.png";
 import sun from "@/assets/icons/sun.png";
 import viri from "@/assets/icons/viri.png";
@@ -37,4 +38,5 @@ export const icons = {
   check,
   x,
   chatPlus,
+  send,
 };

@@ -12,10 +12,14 @@ interface AuthResult {
     sessionId: string;
     userId: string;
     email: string;
+    name: string;
   };
 }
 
-export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
+export const googleOAuth = async (
+  startSSOFlow: any,
+  setUser?: (user: any) => void
+): Promise<AuthResult> => {
   try {
     const { createdSessionId, setActive, signUp } = await startSSOFlow({
       strategy: "oauth_google",
@@ -29,7 +33,6 @@ export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
           session: createdSessionId,
           navigate: async ({ session }: { session: any }) => {
             if (session?.currentTask) {
-              console.log(session?.currentTask);
               return;
             }
 
@@ -37,7 +40,7 @@ export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
           },
         });
         if (signUp.createdSessionId) {
-          // Create user in database without name initially
+          // Create user in database with name from Google
           await fetchAPI("/(api)/user", {
             method: "POST",
             body: JSON.stringify({
@@ -46,6 +49,15 @@ export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
               name: `${signUp.firstName} ${signUp.lastName}`,
             }),
           });
+
+          // Store user data in store if setUser is provided
+          if (setUser) {
+            setUser({
+              email: signUp.emailAddress,
+              clerkId: signUp.createdUserId,
+              name: `${signUp.firstName} ${signUp.lastName}`,
+            });
+          }
         }
       }
 
@@ -53,9 +65,6 @@ export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
         session: createdSessionId,
         navigate: async ({ session }: { session: any }) => {
           if (session?.currentTask) {
-            // Check for tasks and navigate to custom UI to help users resolve them
-            // See https://clerk.com/docs/custom-flows/overview#session-tasks
-            console.log(session?.currentTask);
             return;
           }
 
@@ -69,6 +78,7 @@ export const googleOAuth = async (startSSOFlow: any): Promise<AuthResult> => {
           sessionId: createdSessionId,
           userId: signUp?.createdUserId || "",
           email: signUp?.emailAddress || "",
+          name: `${signUp.firstName} ${signUp.lastName}`,
         },
       };
     }
