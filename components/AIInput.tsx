@@ -188,13 +188,7 @@ const AIInput = ({
                   onChangeText={setMessage}
                 />
                 {!message.trim() ? (
-                  <TouchableOpacity
-                    onPress={
-                      message.trim()
-                        ? handleSendMessage
-                        : handleRecordButtonPress
-                    }
-                  >
+                  <TouchableOpacity onPress={handleRecordButtonPress}>
                     <Image
                       source={icons.mic}
                       className="size-9"
@@ -202,7 +196,12 @@ const AIInput = ({
                     />
                   </TouchableOpacity>
                 ) : (
-                  <Image source={icons.sendRd} resizeMode="contain" />
+                  <TouchableOpacity
+                    onPress={handleSendMessage}
+                    className="size-9"
+                  >
+                    <Image source={icons.sendRd} resizeMode="contain" />
+                  </TouchableOpacity>
                 )}
               </View>
               <View className="size-[50px] bg-white/20 rounded-full items-center justify-center">
