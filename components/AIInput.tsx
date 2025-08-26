@@ -177,34 +177,42 @@ const AIInput = ({
             />
           ) : (
             <>
-              <View className="flex-1 flex-row items-center rounded-full bg-white/20 p-3 h-[50px]">
+              <View className="flex-1 flex-row items-end rounded-[30px] bg-white/20 p-4">
                 <TextInput
-                  className="flex-1 text-base text-white"
+                  className="flex-1 text-base text-white text-wrap py-2"
                   placeholder="Tap to type or just talk"
                   placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                  multiline
+                  numberOfLines={10}
                   value={message}
                   onChangeText={setMessage}
                 />
-                <TouchableOpacity onPress={handleRecordButtonPress}>
-                  <Image
-                    source={icons.mic}
-                    className="size-9"
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View className="size-[50px] bg-white/20 rounded-full items-center justify-center">
-                {message.trim() ? (
-                  <TouchableOpacity onPress={handleSendMessage}>
+                {!message.trim() ? (
+                  <TouchableOpacity
+                    onPress={
+                      message.trim()
+                        ? handleSendMessage
+                        : handleRecordButtonPress
+                    }
+                  >
                     <Image
-                      source={icons.send}
-                      className=""
+                      source={icons.mic}
+                      className="size-9"
                       resizeMode="contain"
                     />
                   </TouchableOpacity>
                 ) : (
-                  <Image source={icons.share} resizeMode="contain" />
+                  <Image source={icons.sendRd} resizeMode="contain" />
                 )}
+              </View>
+              <View className="size-[50px] bg-white/20 rounded-full items-center justify-center">
+                <TouchableOpacity>
+                  <Image
+                    source={icons.share}
+                    className=""
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
               </View>
             </>
           )}
