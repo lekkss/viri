@@ -29,7 +29,7 @@ const Email = () => {
       // Start sign-up process using email and password provided
       await signUp.create({
         emailAddress: email,
-        password: "123lekaN@.",
+        password: process.env.EXPO_PUBLIC_PASSWORD!,
       });
 
       // Send user an email with verification code
