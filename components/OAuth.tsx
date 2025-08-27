@@ -1,5 +1,5 @@
-import { googleOAuth } from "@/assets/lib/auth";
 import { icons } from "@/constants";
+import { googleOAuth } from "@/lib/auth";
 import { useSignUpStore } from "@/store";
 import { useSSO } from "@clerk/clerk-expo";
 import { router } from "expo-router";

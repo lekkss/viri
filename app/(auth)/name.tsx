@@ -1,7 +1,7 @@
-import { fetchAPI } from "@/assets/lib/fetch";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import ScreenContainer from "@/components/ScreenContainer";
+import { fetchAPI } from "@/lib/fetch";
 import { useSignUpStore } from "@/store";
 import { router } from "expo-router";
 import React, { useState } from "react";

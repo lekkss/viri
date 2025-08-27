@@ -1,11 +1,11 @@
-import { fetchAPI } from "@/assets/lib/fetch";
-import { sendMessageToOpenAI } from "@/assets/lib/openai";
 import AIInput from "@/components/AIInput";
 import ChatCard from "@/components/ChatCard";
 import ChatLoading from "@/components/ChatLoading";
 import EmptyChat from "@/components/EmptyChat";
 import Header from "@/components/Header";
 import ScreenContainer from "@/components/ScreenContainer";
+import { fetchAPI } from "@/lib/fetch";
+import { sendMessageToOpenAI } from "@/lib/openai";
 import { useMessagesStore } from "@/store";
 import { Chat } from "@/types/type";
 import { useUser } from "@clerk/clerk-expo";

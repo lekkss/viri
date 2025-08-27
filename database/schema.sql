@@ -61,6 +61,16 @@ SELECT
 FROM conversations c
 LEFT JOIN messages m ON c.id = m.conversation_id
 GROUP BY c.id, c.user_id, c.title, c.created_at, c.updated_at, c.is_active;
+
+-- ALTER statements to add support for images and files
+-- Add columns to support file attachments
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS has_attachments BOOLEAN DEFAULT false;
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS attachments JSONB;
+
+-- Add indexes for better performance on new columns
+CREATE INDEX IF NOT EXISTS idx_messages_has_attachments ON messages(has_attachments);
+CREATE INDEX IF NOT EXISTS idx_messages_attachments_gin ON messages USING GIN (attachments);
+
 -- Insert sample data (optional)
 -- INSERT INTO conversations (user_id, title) VALUES 
 --     ('550e8400-e29b-41d4-a716-446655440000', 'First Chat'),

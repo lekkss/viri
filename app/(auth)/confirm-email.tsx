@@ -1,7 +1,7 @@
-import { fetchAPI } from "@/assets/lib/fetch";
 import CustomButton from "@/components/CustomButton";
 import OtpInputField from "@/components/OtpInputField";
 import ScreenContainer from "@/components/ScreenContainer";
+import { fetchAPI } from "@/lib/fetch";
 import { useSignUpStore } from "@/store";
 import { useSignUp } from "@clerk/clerk-expo";
 import { router } from "expo-router";
