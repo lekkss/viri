@@ -1,7 +1,9 @@
 import { icons } from "@/constants";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import CameraScreen from "./CameraScreen";
 
 type FileTypeProps = {
   onFileSelected: (file: any) => void;
@@ -13,9 +15,10 @@ type FileTypeProps = {
 const FileType = ({
   onFileSelected,
   onImageSelected,
-  onCancel,
   onClose,
 }: FileTypeProps) => {
+  const [showCamera, setShowCamera] = useState(false);
+
   const fileTypes = [
     {
       name: "Camera",
@@ -38,9 +41,7 @@ const FileType = ({
     const pickImage = async () => {
       // No permissions request is necessary for launching the image library
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images", "videos"],
-        allowsEditing: true,
-        aspect: [16, 9],
+        mediaTypes: ["images"],
         quality: 1,
         allowsMultipleSelection: true,
       });
@@ -50,6 +51,7 @@ const FileType = ({
         onClose();
       }
     };
+
     const handleFilePicker = async () => {
       let result = await DocumentPicker.getDocumentAsync({
         type: item.type, // type is different for different file types
@@ -62,17 +64,58 @@ const FileType = ({
         onClose();
       }
     };
+
+    const handleCamera = async () => {
+      // setShowCamera(true);
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        alert("Camera permission required");
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync();
+
+      if (!result.canceled) {
+        console.log(result.assets[0].uri); // captured image URI
+        onImageSelected(result.assets);
+        onClose();
+      }
+    };
+
     return (
       <TouchableOpacity
         key={index}
         className={`p-3 ${index === fileTypes.length - 1 ? "" : "border-b"} border-gray-200 flex-row items-center justify-between`}
-        onPress={item.name === "File" ? handleFilePicker : pickImage}
+        onPress={
+          item.name === "File"
+            ? handleFilePicker
+            : item.name === "Camera"
+              ? handleCamera
+              : pickImage
+        }
       >
         <Text className="text-[17px] text-black">{item.name}</Text>
         <Image source={item.icon} resizeMode="contain" />
       </TouchableOpacity>
     );
   };
+
+  if (showCamera) {
+    return (
+      <CameraScreen
+        onClose={() => {
+          setShowCamera(false);
+          onClose();
+        }}
+        onCapture={(image) => {
+          onImageSelected([{ uri: image, type: "image" }]);
+          setShowCamera(false);
+          onClose();
+        }}
+      />
+    );
+  }
+
   return (
     <View className="rounded-2xl bg-[#F8F8F8] shadow-lg w-[75%]">
       {fileTypes.map((item, index) => renderFileType(item, index))}

@@ -14,8 +14,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import InputFileCard from "./InputFileCard";
 import FileType from "./FileType";
+import InputFileCard from "./InputFileCard";
 import InputImageCard from "./InputImageCard";
 
 const RecordingView = ({
