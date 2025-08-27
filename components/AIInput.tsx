@@ -169,7 +169,7 @@ const AIInput = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="my-2 flex flex-row items-center gap-3">
+        <View className="my-2 flex flex-row items-end gap-3">
           {recordingStatus === "recording" ? (
             <RecordingView
               onCancel={() => setRecordingStatus("idle")}
@@ -177,9 +177,9 @@ const AIInput = ({
             />
           ) : (
             <>
-              <View className="flex-1 flex-row items-end rounded-[30px] bg-white/20 p-4">
+              <View className="relative flex-1 flex-row items-center rounded-[30px] bg-white/20 min-h-[50px] py-2">
                 <TextInput
-                  className="flex-1 text-base text-white text-wrap py-2"
+                  className="flex-1 text-base text-white text-wrap min-h-[30px] px-4 ml-2 mr-10"
                   placeholder="Tap to type or just talk"
                   placeholderTextColor="rgba(255, 255, 255, 0.7)"
                   multiline
@@ -188,7 +188,10 @@ const AIInput = ({
                   onChangeText={setMessage}
                 />
                 {!message.trim() ? (
-                  <TouchableOpacity onPress={handleRecordButtonPress}>
+                  <TouchableOpacity
+                    onPress={handleRecordButtonPress}
+                    className="mr-2"
+                  >
                     <Image
                       source={icons.mic}
                       className="size-9"
@@ -198,7 +201,7 @@ const AIInput = ({
                 ) : (
                   <TouchableOpacity
                     onPress={handleSendMessage}
-                    className="size-9"
+                    className="absolute bottom-4 right-4"
                   >
                     <Image source={icons.sendRd} resizeMode="contain" />
                   </TouchableOpacity>

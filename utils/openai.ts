@@ -8,7 +8,7 @@ export const getOpenAI = () => {
   if (!openaiInstance) {
     openaiInstance = new OpenAI({
       apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY || "",
-      organization: "org-J1iRCgJZRTD2AIkrcXE8TmEu",
+      organization: process.env.EXPO_PUBLIC_OPENAI_ORGANIZATION || "",
     });
   }
   return openaiInstance;
