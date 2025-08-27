@@ -3,6 +3,7 @@ import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  FlatList,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -13,6 +14,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import InputFileCard from "./InputFileCard";
+import FileType from "./FileType";
+import InputImageCard from "./InputImageCard";
 
 const RecordingView = ({
   onCancel,
@@ -54,6 +58,9 @@ const AIInput = ({
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
   const [message, setMessage] = useState("");
+  const [showFileType, setShowFileType] = useState(false);
+  const [files, setFiles] = useState<any[]>([]);
+  const [images, setImages] = useState<any[]>([]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -164,6 +171,26 @@ const AIInput = ({
     }
   }
 
+  const handleFileSelected = (file: any) => {
+    console.log("File selected", file);
+    setFiles([...files, ...file]);
+  };
+
+  const handleImageSelected = (image: any) => {
+    console.log("Image selected", image);
+    setImages([...images, ...image]);
+  };
+
+  const handleFileRemove = (file: any) => {
+    console.log("File removed", file);
+    setFiles(files.filter((f) => f.uri !== file.uri));
+  };
+
+  const handleImageRemove = (image: any) => {
+    console.log("Image removed", image);
+    setImages(images.filter((i) => i.uri !== image.uri));
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -176,47 +203,104 @@ const AIInput = ({
               onConfirm={() => setRecordingStatus("idle")}
             />
           ) : (
-            <>
-              <View className="relative flex-1 flex-row items-center rounded-[30px] bg-white/20 min-h-[50px] py-2">
-                <TextInput
-                  className="flex-1 text-base text-white text-wrap min-h-[30px] px-4 ml-2 mr-10"
-                  placeholder="Tap to type or just talk"
-                  placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                  multiline
-                  numberOfLines={10}
-                  value={message}
-                  onChangeText={setMessage}
-                />
-                {!message.trim() ? (
-                  <TouchableOpacity
-                    onPress={handleRecordButtonPress}
-                    className="mr-2"
-                  >
-                    <Image
-                      source={icons.mic}
-                      className="size-9"
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={handleSendMessage}
-                    className="absolute bottom-4 right-4"
-                  >
-                    <Image source={icons.sendRd} resizeMode="contain" />
-                  </TouchableOpacity>
+            <View className="flex-1 flex-row items-end justify-between gap-2 relative">
+              {showFileType && (
+                <View className="absolute bottom-[55px] w-full right-0 z-10 items-end">
+                  <FileType
+                    onFileSelected={handleFileSelected}
+                    onImageSelected={handleImageSelected}
+                    onCancel={() => setShowFileType(false)}
+                    onClose={() => setShowFileType(false)}
+                  />
+                </View>
+              )}
+              <View className=" flex-1 flex-col  justify-between rounded-[30px] bg-white/20 min-h-[50px] py-2 overflow-hidden">
+                {images.length > 0 && (
+                  <FlatList
+                    data={images}
+                    renderItem={({ item }) => (
+                      <InputImageCard
+                        key={item.uri}
+                        image={item}
+                        onRemove={() => handleImageRemove(item)}
+                      />
+                    )}
+                    keyExtractor={(item) => item.uri}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 16,
+                    }}
+                    ItemSeparatorComponent={() => <View className="w-2" />}
+                  />
                 )}
+                {files.length > 0 && (
+                  <FlatList
+                    data={files}
+                    renderItem={({ item }) => (
+                      <InputFileCard
+                        key={item.uri}
+                        file={item}
+                        onRemove={() => handleFileRemove(item)}
+                      />
+                    )}
+                    keyExtractor={(item) => item.uri}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 16,
+                    }}
+                    ItemSeparatorComponent={() => <View className="w-2" />}
+                  />
+                )}
+                <View className="relative flex-row items-end justify-between pr-2">
+                  <TextInput
+                    className="flex-1 text-base text-white text-wrap min-h-[30px] px-4 ml-2 mr-10"
+                    placeholder="Tap to type or just talk"
+                    placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                    multiline
+                    numberOfLines={10}
+                    value={message}
+                    onChangeText={setMessage}
+                  />
+                  {!message.trim() &&
+                  files.length === 0 &&
+                  images.length === 0 ? (
+                    <TouchableOpacity onPress={handleRecordButtonPress}>
+                      <Image
+                        source={icons.mic}
+                        className="size-9"
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={handleSendMessage}
+                      className={`${
+                        message.trim() || files.length > 0 || images.length > 0
+                          ? "p-2"
+                          : ""
+                      }`}
+                    >
+                      <Image source={icons.sendRd} resizeMode="contain" />
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
               <View className="size-[50px] bg-white/20 rounded-full items-center justify-center">
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setShowFileType(!showFileType)}
+                >
                   <Image
-                    source={icons.share}
+                    source={icons.attach}
                     className=""
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
               </View>
-            </>
+            </View>
           )}
         </View>
       </TouchableWithoutFeedback>

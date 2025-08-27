@@ -1,13 +1,17 @@
 import account from "@/assets/icons/account.png";
 import attach from "@/assets/icons/attach.png";
 import audio from "@/assets/icons/audio.png";
+import camera from "@/assets/icons/camera.png";
 import chatPlus from "@/assets/icons/chat-plus.png";
 import check from "@/assets/icons/check.png";
 import explore from "@/assets/icons/explore.png";
+import file from "@/assets/icons/file.png";
 import google from "@/assets/icons/google.png";
 import today from "@/assets/icons/home.png";
 import library from "@/assets/icons/library.png";
 import mic from "@/assets/icons/mic.png";
+import photo from "@/assets/icons/photo.png";
+import plaintext from "@/assets/icons/plaintext.png";
 import sendRd from "@/assets/icons/send-rd.png";
 import send from "@/assets/icons/send.png";
 import share from "@/assets/icons/share.png";
@@ -41,4 +45,8 @@ export const icons = {
   chatPlus,
   send,
   sendRd,
+  camera,
+  photo,
+  file,
+  plaintext,
 };

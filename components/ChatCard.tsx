@@ -8,7 +8,7 @@ interface ChatCardProps {
 const ChatCard = ({ chat }: ChatCardProps) => {
   return (
     <View
-      className={` p-4 max-w-[80%] ${chat.isUser ? "self-end bg-white/20 rounded-2xl" : "self-start"}`}
+      className={`p-4 max-w-[80%] ${chat.isUser ? "self-end bg-white/20 rounded-2xl" : "self-start px-0"}`}
     >
       <Text className="text-white font-inter-regular text-lg">
         {chat.message}
