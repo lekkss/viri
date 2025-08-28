@@ -59,7 +59,7 @@ const Account = () => {
       // Still try to sign out even if storage clearing fails
       await signOut();
     }
-    router.replace("/");
+    router.replace("/(auth)/welcome");
   };
 
   return (

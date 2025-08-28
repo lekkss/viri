@@ -3,13 +3,15 @@ import OtpInputField from "@/components/OtpInputField";
 import ScreenContainer from "@/components/ScreenContainer";
 import { fetchAPI } from "@/lib/fetch";
 import { useSignUpStore } from "@/store";
-import { useSignUp } from "@clerk/clerk-expo";
+import { useSignIn, useSignUp } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, SafeAreaView, Text, View } from "react-native";
 
 const ConfirmEmail = () => {
-  const { signUp, setActive, isLoaded } = useSignUp();
+  const { signUp, setActive, isLoaded: isSignUpLoaded } = useSignUp();
+  const { signIn, isLoaded: isSignInLoaded } = useSignIn();
+
   const [otp, setOtp] = useState("");
   const {
     verification,
@@ -20,23 +22,21 @@ const ConfirmEmail = () => {
     isLoading,
   } = useSignUpStore();
 
-  // Check if email is valid (basic validation)
   const isOtpValid = otp.length === 6;
 
-  // Handle submission of verification form
   const onVerifyPress = async () => {
-    if (!isLoaded) return;
-
+    if (!isSignUpLoaded || !isSignInLoaded) return;
     setLoading(true);
+
     try {
-      // Use the code the user provided to attempt verification
+      // Try sign-up email verification first
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code: otp,
       });
 
       if (signUpAttempt.status === "complete") {
-        // Create user in database without name initially
-        await fetchAPI("/(api)/user", {
+        // Create user in DB if new
+        await fetchAPI("/(api)/user/create", {
           method: "POST",
           body: JSON.stringify({
             email: signUpAttempt.emailAddress,
@@ -45,7 +45,6 @@ const ConfirmEmail = () => {
           }),
         });
 
-        // Store user data in store
         setUser({
           email: signUpAttempt.emailAddress || "",
           clerkId: signUpAttempt.createdUserId || "",
@@ -54,23 +53,39 @@ const ConfirmEmail = () => {
         await setActive({ session: signUpAttempt.createdSessionId });
         setVerification({ ...verification, state: "success" });
         router.push("/name");
-      } else {
-        setVerification({
-          ...verification,
-          state: "error",
-          error: signUpAttempt.status || "Verification failed",
-        });
-        Alert.alert("Error", "Verification failed. Please try again.");
-        console.error(JSON.stringify(signUpAttempt, null, 2));
+        return;
       }
+
+      throw new Error("Unexpected sign-up state");
     } catch (err: any) {
-      setVerification({
-        ...verification,
-        state: "error",
-        error: err.errors[0].longMessage || "Verification failed",
-      });
-      Alert.alert("Error", err.errors[0].longMessage || "Verification failed");
-      console.error(JSON.stringify(err, null, 2));
+      console.error("Sign-up verification error:", err);
+
+      // If sign-up fails, try sign-in verification
+      try {
+        // Attempt to verify sign-in with the OTP
+        const signInAttempt = await signIn.attemptFirstFactor({
+          strategy: "email_code",
+          code: otp,
+        });
+
+        if (signInAttempt.status === "complete") {
+          await setActive({ session: signInAttempt.createdSessionId });
+
+          setUser({
+            email: user.email, // Use the email from store
+            clerkId: signInAttempt.createdSessionId || "",
+          });
+
+          setVerification({ ...verification, state: "success" });
+          router.push("/(root)/(tabs)/today"); // Existing users go to main app
+          return;
+        } else {
+          throw new Error("Sign-in verification failed");
+        }
+      } catch (signInErr: any) {
+        console.error("Sign-in verification error:", signInErr);
+        Alert.alert("Error", "Invalid verification code. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

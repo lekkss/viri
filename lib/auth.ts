@@ -21,7 +21,7 @@ export const googleOAuth = async (
   setUser?: (user: any) => void
 ): Promise<AuthResult> => {
   try {
-    const { createdSessionId, setActive, signUp } = await startSSOFlow({
+    const { createdSessionId, setActive, signUp, signIn } = await startSSOFlow({
       strategy: "oauth_google",
       redirectUrl: AuthSession.makeRedirectUri(),
     });
@@ -39,9 +39,18 @@ export const googleOAuth = async (
             router.push("/(root)/(tabs)/today");
           },
         });
+        if (signIn.createdSessionId) {
+          if (setUser) {
+            setUser({
+              email: signIn.emailAddress,
+              clerkId: signIn.userId,
+              name: `${signIn.firstName} ${signIn.lastName}`,
+            });
+          }
+        }
         if (signUp.createdSessionId) {
           // Create user in database with name from Google
-          await fetchAPI("/(api)/user", {
+          await fetchAPI("/(api)/user/create", {
             method: "POST",
             body: JSON.stringify({
               email: signUp.emailAddress,

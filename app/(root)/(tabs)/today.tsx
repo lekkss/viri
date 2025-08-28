@@ -4,15 +4,44 @@ import ChatLoading from "@/components/ChatLoading";
 import EmptyChat from "@/components/EmptyChat";
 import Header from "@/components/Header";
 import ScreenContainer from "@/components/ScreenContainer";
-import { fetchAPI } from "@/lib/fetch";
+import { fetchAPI, useFetch } from "@/lib/fetch";
 import { sendMessageToOpenAI } from "@/lib/openai";
-import { useMessagesStore } from "@/store";
+import { useMessagesStore, useSignUpStore } from "@/store";
 import { Chat } from "@/types/type";
 import { useUser } from "@clerk/clerk-expo";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 
 const Today = () => {
+  const { user: clerkUser } = useUser();
+  const { setUser } = useSignUpStore();
+
+  // Fetch user data when clerkUser is available
+
+  const { data: userResponse } = useFetch(`/(api)/user/${clerkUser?.id}`);
+
+  useEffect(() => {
+    if (
+      userResponse &&
+      typeof userResponse === "object" &&
+      "data" in userResponse
+    ) {
+      const responseData = userResponse as any;
+      if (
+        responseData.data &&
+        Array.isArray(responseData.data) &&
+        responseData.data.length > 0
+      ) {
+        const userData = responseData.data[0];
+        setUser({
+          email: userData.email,
+          clerkId: userData.clerk_id,
+          name: userData.name,
+        });
+      }
+    }
+  }, [userResponse, setUser]);
+
   const {
     messages,
     isLoading,

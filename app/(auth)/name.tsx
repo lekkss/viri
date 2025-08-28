@@ -22,7 +22,7 @@ const Name = () => {
 
     setLoading(true);
     try {
-      await fetchAPI("/(api)/user", {
+      await fetchAPI("/(api)/user/update", {
         method: "PATCH",
         body: JSON.stringify({
           email: user.email,
