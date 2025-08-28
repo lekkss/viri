@@ -31,7 +31,7 @@ const InputField = ({
           </Text>
         )}
         <View
-          className={`flex flex-row items-center justify-start relative bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500 ${containerStyle}`}
+          className={`flex flex-row items-center justify-start relative bg-[#E6E6E61A] rounded-full border border-[#E6E6E61A]/50 focus:border-primary-500 ${containerStyle}`}
         >
           {icon && (
             <Image
@@ -41,7 +41,7 @@ const InputField = ({
             />
           )}
           <TextInput
-            className={`rounded-full p-4  flex-1 font-inter-medium ${inputStyle} text-left`}
+            className={`rounded-full p-4  flex-1 font-inter-medium ${inputStyle} text-center text-white`}
             value={value}
             onChangeText={onChangeText}
             secureTextEntry={secureTextEntry}

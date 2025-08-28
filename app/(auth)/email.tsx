@@ -109,8 +109,8 @@ const Email = () => {
           title={isLoading ? "Loading..." : "Continue"}
           onPress={onContinuePress}
           className={`w-11/12`}
-          bgVariant={isEmailValid && !isLoading ? "primary" : "ghost"}
-          textVariant={isEmailValid && !isLoading ? "primary" : "secondary"}
+          bgVariant={isEmailValid && !isLoading ? "primary" : "inactive"}
+          textVariant={isEmailValid && !isLoading ? "primary" : "inactive"}
           disabled={isLoading}
         />
       </SafeAreaView>

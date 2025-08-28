@@ -63,9 +63,9 @@ const Name = () => {
         <CustomButton
           title={isLoading ? "Updating..." : "Let's go"}
           onPress={() => onNameChange(name)}
-          className={`w-[90%]`}
-          bgVariant={isNameValid && !isLoading ? "primary" : "ghost"}
-          textVariant={isNameValid && !isLoading ? "primary" : "secondary"}
+          className={`w-11/12`}
+          bgVariant={isNameValid && !isLoading ? "primary" : "inactive"}
+          textVariant={isNameValid && !isLoading ? "primary" : "inactive"}
           disabled={isLoading}
         />
       </SafeAreaView>

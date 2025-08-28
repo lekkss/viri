@@ -98,12 +98,14 @@ const ConfirmEmail = () => {
           <Text className="text-2xl font-inter-medium text-white text-center">
             Confirm your email
           </Text>
-          <Text className="font-inter-regular text-greyText text-center max-w-[250px] mx-auto">
-            Please enter the code we sent to
-          </Text>
-          <Text className="font-inter-medium text-white text-center max-w-[250px] mx-auto">
-            {user.email}
-          </Text>
+          <View>
+            <Text className="font-inter-regular text-greyText text-center max-w-[250px] mx-auto">
+              Please enter the code we sent to
+            </Text>
+            <Text className="font-inter-medium text-white text-center max-w-[250px] mx-auto">
+              {user.email}
+            </Text>
+          </View>
           <OtpInputField
             containerStyle="mt-4"
             labelStyle="text-white"
@@ -116,9 +118,9 @@ const ConfirmEmail = () => {
         <CustomButton
           title={isLoading ? "Verifying..." : "Continue"}
           onPress={onVerifyPress}
-          className={`w-[90%]`}
-          bgVariant={isOtpValid && !isLoading ? "primary" : "ghost"}
-          textVariant={isOtpValid && !isLoading ? "primary" : "secondary"}
+          className={`w-11/12`}
+          bgVariant={isOtpValid && !isLoading ? "primary" : "inactive"}
+          textVariant={isOtpValid && !isLoading ? "primary" : "inactive"}
           disabled={isLoading}
         />
       </SafeAreaView>

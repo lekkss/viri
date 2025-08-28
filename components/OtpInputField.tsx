@@ -92,11 +92,8 @@ const OtpInputField = ({
           ref={(ref) => {
             if (ref) inputRefs.current[i] = ref;
           }}
-          className={`w-14 h-14 text-center text-xl font-inter-bold border-2 rounded-xl mx-1 ${
-            focusedIndex === i
-              ? "border-primary-500 bg-white"
-              : "border-neutral-200 bg-neutral-50"
-          } ${inputStyle}`}
+          className={`w-14 h-14 text-center text-xl font-inter-bold border-2 rounded-xl mx-1 text-[#E6E6E6]  border-[#E6E6E61A]/10 bg-[#E6E6E61A]/10
+           ${inputStyle}`}
           value={value[i] || ""}
           onChangeText={(text) => handleInputChange(text, i)}
           onKeyPress={(e) => handleKeyPress(e, i)}
@@ -104,7 +101,7 @@ const OtpInputField = ({
           keyboardType={keyboardType}
           maxLength={1}
           selectTextOnFocus
-          selectionColor="#3B82F6"
+          selectionColor="#E6E6E6"
         />
       );
     }
