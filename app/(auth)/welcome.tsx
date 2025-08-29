@@ -32,7 +32,7 @@ export default function Welcome() {
             textVariant="secondary"
             bgVariant="outline"
             onPress={() => {
-              router.replace("/(auth)/email");
+              router.push("/(auth)/email");
             }}
           />
           <Text className="font-inter-regular text-greyText text-sm text-center mt-2 max-w-[250px] mx-auto">
