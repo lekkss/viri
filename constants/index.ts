@@ -12,6 +12,7 @@ import library from "@/assets/icons/library.png";
 import mic from "@/assets/icons/mic.png";
 import photo from "@/assets/icons/photo.png";
 import plaintext from "@/assets/icons/plaintext.png";
+import save from "@/assets/icons/save.png";
 import sendRd from "@/assets/icons/send-rd.png";
 import send from "@/assets/icons/send.png";
 import share from "@/assets/icons/share.png";
@@ -20,12 +21,14 @@ import viri from "@/assets/icons/viri.png";
 import x from "@/assets/icons/x.png";
 import bgRounded from "@/assets/images/bg-gradient-rounded.png";
 import bg from "@/assets/images/bg-gradient.png";
+import blogImage from "@/assets/images/blog-image.png";
 import logo from "@/assets/images/icon.png";
 
 export const images = {
   bg,
   bgRounded,
   logo,
+  blogImage,
 };
 
 export const icons = {
@@ -49,4 +52,5 @@ export const icons = {
   photo,
   file,
   plaintext,
+  save,
 };

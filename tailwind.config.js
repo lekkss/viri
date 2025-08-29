@@ -9,6 +9,7 @@ module.exports = {
         white: "#E6E6E6",
         greyText: "#B3B3B3",
         darkText: "#070A00",
+        green: "#D0FF5B",
       },
       fontFamily: {
         inter: ["Inter_400Regular"],
