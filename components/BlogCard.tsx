@@ -44,11 +44,11 @@ const BlogCard = ({ blog }: BlogCardProps) => {
           </Text>
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
-              <Text className="text-[#FFFFFF] font-inter-regular text-sm">
+              <Text className="text-[#FFFFFF] font-inter-light text-sm">
                 {formatDate(blog.createdAt)}
               </Text>
               <View className="h-1 w-1 bg-white rounded-full" />
-              <Text className="text-[#FFFFFF] font-inter-regular text-sm">
+              <Text className="text-[#FFFFFF] font-inter-light text-sm">
                 {blog.timeToRead} read
               </Text>
             </View>

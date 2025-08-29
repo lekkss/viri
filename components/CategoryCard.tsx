@@ -36,7 +36,7 @@ const CategoryCard = ({ category, isActive, onPress }: CategoryCardProps) => {
         onPress={onPress}
         className="w-fit h-[40px] rounded-full p-3 items-center justify-center px-6 bg-[#EBEBEB33]"
       >
-        <Text className="font-inter-medium text-greyText">{category.name}</Text>
+        <Text className="font-inter-medium text-darkText">{category.name}</Text>
       </TouchableOpacity>
     </View>
   );
